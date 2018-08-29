@@ -28,11 +28,9 @@ namespace BankingLedger.Core
                 return _accountName;
             }
         }
-        
 
         public BankingAccount(string accountName, int snapshotFrequency)
         {
-
             AccountNumber = MockIDGenerator.Generate();
             _accountName= accountName;
             _accountRecords = new List<FinancialTransaction>();
@@ -44,9 +42,11 @@ namespace BankingLedger.Core
         {
             decimal currentBalance = 0.00m;
 
+            //This is a 'hacky' implementation. 
+            //In a production system, this would be based on date, not ID
             BalanceSnapshot lastSnapshot = GetMostRecentSnapshot();
             if (lastSnapshot != null)
-            {                
+            {
                 var trxsSinceSnapshot = _accountRecords.Where(t => t.TransactionID > lastSnapshot.TransactionID);
                 currentBalance = SumTransactions(trxsSinceSnapshot) + lastSnapshot.Balance;
             }
@@ -68,6 +68,8 @@ namespace BankingLedger.Core
             _accountRecords.Add(trx);
             var currentBalance = GetBalance();
 
+            //In a production system, we would run a separate process that would snapshot
+            //the previous days event, and we would make the snapshot time-based instead of ID-based.
             var shouldSnapshot = _accountRecords.Count % _snapshotFrequency == 0;
             if (shouldSnapshot)
             {                
@@ -82,18 +84,14 @@ namespace BankingLedger.Core
             return trxs.Sum(t => t.RecordType == FinancialTransactionType.CREDIT ? t.Amount : -t.Amount);
         }
 
+        /// <summary>
+        /// Returns the most-recent snapshot of the account balance.
+        /// </summary>
+        /// <returns>A snapshot with the account's balance as of that snapshot.</returns>
         public BalanceSnapshot GetMostRecentSnapshot()
         {
             return _snapshots.LastOrDefault();
         }
-
-
-        
-
-
-        
-
-
 
     }
 }
