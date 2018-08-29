@@ -1,4 +1,5 @@
 ﻿using BankingLedger.Core.DataModels;
+using BankingLedger.Core.Enums;
 using BankingLedger.Core.Utilities;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace BankingLedger.Core
         private List<FinancialTransaction> _accountRecords;
         private List<BalanceSnapshot> _snapshots;
         private string _accountName;
+        private int _snapshotFrequency;
 
         private long AccountNumber { get; }
 
@@ -28,28 +30,30 @@ namespace BankingLedger.Core
         }
         
 
-        public BankingAccount(string accountName)
+        public BankingAccount(string accountName, int snapshotFrequency)
         {
 
             AccountNumber = MockIDGenerator.Generate();
             _accountName= accountName;
             _accountRecords = new List<FinancialTransaction>();
             _snapshots = new List<BalanceSnapshot>();
+            _snapshotFrequency = snapshotFrequency;
         }
 
         public decimal GetBalance()
         {
             decimal currentBalance = 0.00m;
 
-            BalanceSnapshot lastSnapshot = _snapshots.LastOrDefault();
+            BalanceSnapshot lastSnapshot = GetMostRecentSnapshot();
             if (lastSnapshot != null)
-            {
+            {                
                 var trxsSinceSnapshot = _accountRecords.Where(t => t.TransactionID > lastSnapshot.TransactionID);
+                currentBalance = SumTransactions(trxsSinceSnapshot) + lastSnapshot.Balance;
             }
             else
             {
                 currentBalance = SumTransactions(_accountRecords);
-            }               
+            }
             
             return currentBalance;
         }
@@ -62,13 +66,27 @@ namespace BankingLedger.Core
         public decimal PostTransaction(FinancialTransaction trx)
         {
             _accountRecords.Add(trx);
-            return GetBalance();            
+            var currentBalance = GetBalance();
+
+            var shouldSnapshot = _accountRecords.Count % _snapshotFrequency == 0;
+            if (shouldSnapshot)
+            {                
+                _snapshots.Add(new BalanceSnapshot(currentBalance, DateTime.UtcNow, trx.TransactionID));
+            }
+
+            return currentBalance;
         }
 
         public decimal SumTransactions(IEnumerable<FinancialTransaction> trxs)
         {
-            return trxs.Sum(t => t.Amount);
+            return trxs.Sum(t => t.RecordType == FinancialTransactionType.CREDIT ? t.Amount : -t.Amount);
         }
+
+        public BalanceSnapshot GetMostRecentSnapshot()
+        {
+            return _snapshots.LastOrDefault();
+        }
+
 
         
 

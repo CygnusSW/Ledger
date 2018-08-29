@@ -1,4 +1,5 @@
-﻿using BankingLedger.Core.Utilities;
+﻿using BankingLedger.Core.Enums;
+using BankingLedger.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,11 @@ namespace BankingLedger.Core.DataModels
         public long TransactionID;
         public DateTime TransactionDate { get; }
         public DateTime? PostedDate { get; }
-        public decimal Amount { get; }
+        public virtual decimal Amount { get; }
         public string Description { get; }
-        
-        public FinancialTransaction(decimal amount, string description, DateTime trxDate, bool post = true)
+        public FinancialTransactionType RecordType { get; }
+
+        public FinancialTransaction(decimal amount, string description, DateTime trxDate, FinancialTransactionType recordType, bool post = true)
         {
             TransactionID = MockIDGenerator.Generate();
             Amount = amount;
@@ -24,6 +26,7 @@ namespace BankingLedger.Core.DataModels
             var now = DateTime.UtcNow;
             TransactionDate = now;
             PostedDate = post ? now : (DateTime?)null;
+            RecordType = recordType;
         }
 
 

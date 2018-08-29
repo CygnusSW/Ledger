@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{67942369-B294-488E-9E69-724569B23FB6}</ProjectGuid>
+    <ProjectGuid>{618B4CAC-661D-4B84-B5B4-AA963E9EEE08}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BankingLedger.Core</RootNamespace>
-    <AssemblyName>BankingLedger.Core</AssemblyName>
+    <RootNamespace>BankLedger.Core</RootNamespace>
+    <AssemblyName>BankLedger.Core</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,12 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BankingAccount.cs" />
-    <Compile Include="DataModels\BalanceSnapshot.cs" />
-    <Compile Include="DataModels\FinancialTransaction.cs" />
-    <Compile Include="Enums\FinancialTransactionType.cs" />
+    <Compile Include="Bank.cs" />
+    <Compile Include="BankAccount.cs" />
+    <Compile Include="BankCustomer.cs" />
+    <Compile Include="Models\FinancialRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\MockIDGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
