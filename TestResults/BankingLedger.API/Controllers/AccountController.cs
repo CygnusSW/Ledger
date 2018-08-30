@@ -17,11 +17,11 @@ using BankingLedger.API.Models;
 using BankingLedger.API.Providers;
 using BankingLedger.API.Results;
 using BankingLedger.API.Utilities;
+using BankingLedger.API.Adapters;
+using System.Net;
 
 namespace BankingLedger.API.Controllers
 {
-    [Authorize]
-    [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
         private AuthenticationModule _authModule;
@@ -29,6 +29,7 @@ namespace BankingLedger.API.Controllers
         public AccountController()
         {
             _authModule = new AuthenticationModule();
+
         }
 
         [HttpPost]
@@ -42,8 +43,45 @@ namespace BankingLedger.API.Controllers
                 return BadRequest("Passwords do not match.");
 
             var user = _authModule.AddUser(username, password);
-            return Ok(user);
+
+            if (user == null)
+                return BadRequest("That username is already taken.");
+
+            return Ok();
         }
+
+
+        [HttpPost]
+        [Route("api/v1/login")]
+        public HttpResponseMessage Login(string userName, string password)
+        {
+
+            FakeUserDBEntity user = _authModule.GetUserByUsername(userName);
+            if (user == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.Unauthorized, "Invalid User", Configuration.Formatters.JsonFormatter);
+            }
+            else
+            {
+                AuthenticationModule authentication = new AuthenticationModule();
+                string token = authentication.GenerateTokenForUser(user.Username, user.UserID);
+                return Request.CreateResponse(HttpStatusCode.OK, token, Configuration.Formatters.JsonFormatter);
+            }
+
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/v1/test")]
+        public IHttpActionResult TestAuthentication()
+        {
+            return Ok("Testing");
+        }
+
+
+
+
+
 
 
     }

@@ -15,13 +15,13 @@ namespace BankingLedger.API.Providers
         #region[GrantResourceOwnerCredentials]
         public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            var userService = new AuthenticationModule();
+            var authService = new AuthenticationModule();
 
             return Task.Run(() =>
             {
                 var username = context.UserName;
                 var password = context.Password;
-                var user = userService.AuthenticateUser(username, password);
+                var user = authService.AuthenticateUser(username, password);
                 if (user != null)
                 {
                     var claims = new List<Claim>()

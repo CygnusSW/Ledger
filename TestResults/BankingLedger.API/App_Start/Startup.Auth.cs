@@ -10,6 +10,7 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using BankingLedger.API.Providers;
 using BankingLedger.API.Models;
+using System.Configuration;
 
 namespace BankingLedger.API
 {
@@ -25,10 +26,9 @@ namespace BankingLedger.API
             // Configure the application for OAuth based flow
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
-                TokenEndpointPath = new PathString("/Token"),
+                TokenEndpointPath = new PathString("/login"),
                 Provider = new OAuthProvider(),
-                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(15),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(int.Parse(ConfigurationManager.AppSettings["TimeoutInMinutes"])),
                 // In production mode set AllowInsecureHttp = false
                 AllowInsecureHttp = true
             };

@@ -9,6 +9,5 @@ namespace BankingLedger.API.Models
     {
         public long UserID;
         public string Username;
-        public string HashedPassword;       
     }
 }
