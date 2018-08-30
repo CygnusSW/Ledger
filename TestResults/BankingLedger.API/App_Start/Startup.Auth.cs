@@ -17,12 +17,13 @@ namespace BankingLedger.API
     public partial class Startup
     {
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
-
         public static string PublicClientId { get; private set; }
 
         // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
+
+
             // Configure the application for OAuth based flow
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
@@ -30,9 +31,9 @@ namespace BankingLedger.API
                 Provider = new OAuthProvider(),
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(int.Parse(ConfigurationManager.AppSettings["TimeoutInMinutes"])),
                 // In production mode set AllowInsecureHttp = false
-                AllowInsecureHttp = true
+                AllowInsecureHttp = true               
             };
-
+            
             // Enable the application to use bearer tokens to authenticate users
             app.UseOAuthBearerTokens(OAuthOptions);
 

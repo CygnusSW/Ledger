@@ -19,6 +19,10 @@ using BankingLedger.API.Results;
 using BankingLedger.API.Utilities;
 using BankingLedger.API.Adapters;
 using System.Net;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Configuration;
 
 namespace BankingLedger.API.Controllers
 {
@@ -64,8 +68,27 @@ namespace BankingLedger.API.Controllers
             else
             {
                 AuthenticationModule authentication = new AuthenticationModule();
-                string token = authentication.GenerateTokenForUser(user.Username, user.UserID);
-                return Request.CreateResponse(HttpStatusCode.OK, token, Configuration.Formatters.JsonFormatter);
+                var u = _authModule.AuthenticateUser(userName, password);
+
+                var claims = new[] 
+                {
+                    new Claim(ClaimTypes.Name, u.Username),
+                    new Claim(ClaimTypes.NameIdentifier, u.UserID.ToString())
+                };
+
+                var signingKey = ConfigurationManager.AppSettings["AuthSecretKey"];
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
+                var signInCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+                var token = new JwtSecurityToken(
+                    issuer: "localhost.com",
+                    audience: "localhost.com",
+                    expires: DateTime.Now.AddMinutes(20),
+                    claims: claims,
+                    signingCredentials: signInCredentials
+                    );
+                var encryptedToken = new JwtSecurityTokenHandler().WriteToken(token);
+                //string token = authentication.GenerateTokenForUser(user.Username, user.UserID);
+                return Request.CreateResponse(HttpStatusCode.OK, encryptedToken, Configuration.Formatters.JsonFormatter);
             }
 
         }

@@ -8,6 +8,7 @@ using BankingLedger.Core.Utilities;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using System.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Configuration;
 
@@ -70,9 +71,9 @@ namespace BankingLedger.API.Utilities
 
             var securityTokenDescriptor = new SecurityTokenDescriptor()
             {
-                Audience = "http://www.localhost:64975",
+                Audience = "audience",
                 Expires = DateTime.UtcNow.AddMinutes(_timeoutInMinutes),
-                Issuer = "self",
+                Issuer = "issuer",
                 IssuedAt = DateTime.UtcNow,
                 Subject = claimsIdentity,
                 SigningCredentials = signingCredentials                
@@ -95,12 +96,12 @@ namespace BankingLedger.API.Utilities
             {
                 ValidAudiences = new string[]
                       {
-                        "http://www.localhost:64975",
+                        "audience",
                       },
 
                 ValidIssuers = new string[]
                   {
-                      "self",
+                      "issuer",
                   },
                 IssuerSigningKey = signingKey
             };
@@ -125,8 +126,8 @@ namespace BankingLedger.API.Utilities
 
         public TokenAuthenticationIdentity PopulateUserIdentity(JwtSecurityToken userPayloadToken)
         {
-            string name = ((userPayloadToken)).Claims.FirstOrDefault(m => m.Type == "unique_name").Value;
-            string userId = ((userPayloadToken)).Claims.FirstOrDefault(m => m.Type == "nameid").Value;
+            string name = ((userPayloadToken)).Claims.FirstOrDefault(m => m.Type == "Username").Value;
+            string userId = ((userPayloadToken)).Claims.FirstOrDefault(m => m.Type == "UserId").Value;
             return new TokenAuthenticationIdentity(name) { UserId = Convert.ToInt32(userId), UserName = name };
 
         }

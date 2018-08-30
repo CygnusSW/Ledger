@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using BankingLedger.API.Filters;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 
