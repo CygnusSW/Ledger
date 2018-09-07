@@ -1,0 +1,19 @@
+$primary:#2e2e2e;
+$primaryLight:lighten($primary, 10);
+$rgbaLight: rgba(red($primaryLight), green($primaryLight), blue($primaryLight), 0.6);
+$secondary:complement($primary);
+$tertiary:#57B89C;
+// $accent:#57B89C;
+$accent:#19331C;
+$muted:#D9C6B3;
+$offwhite:rgb(253, 253, 253);
+$danger:#bf4a4a;
+$lighter-green: #c1d5d9;
+$darkergreen: #698F93;
+$midblue: #687386;
+$darkerblue: #4B535E;
+$gold:rgb(250, 204, 0);
+$fadedGold:rgb(242, 234, 208);
+$fadedGreen:#557359;
+
+

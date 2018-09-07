@@ -1,0 +1,92 @@
+@import "../../../variables.scss";
+$container-padding: 20px;
+
+.form-container {    
+    height: 100%;
+    height: 100%;
+    padding: $container-padding;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #6644EE;
+
+}
+
+.toggle-create-account-container {
+    margin-top:100px;
+    width: 100%;
+}
+
+p, h5 {
+    width: 100%;
+    color: #FFFFFF;
+    text-align: left;
+}
+
+.login-form {
+    color: #FFFFFF;
+}
+
+label, button {
+    width: 100%;
+}
+
+.login-form button {
+    margin-top: 10px;
+}
+
+.btn-create-account {
+    padding-left: 0px;    
+    width: 100%;
+    text-align: left;
+    font-weight: bold;
+    color: #ffc107;
+}
+
+.login-footer {
+    position: absolute;
+    bottom: 0;
+    left: $container-padding;
+}
+
+.registration-form-container, .registration-response-container {    
+    padding: 20px;
+}
+
+ul, li, ul p {
+    color: #000000;
+}
+
+.registration-response-container {
+    background: #bf4a4a;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    
+    &.success {
+        background: $tertiary;
+    }
+
+    & .registration-response-message {
+        margin-left: 20px;
+    }
+}
+
+.error-messages {
+    padding: 0px;
+    text-decoration: none;
+    list-style: none;
+    & li {
+        color: red;
+
+    }
+
+}
+
+.btn-sign-in {
+    width: 50%;
+    margin: 20px auto;
+}

@@ -1,0 +1,79 @@
+<div class="panel">
+  <div class="account-type-summary">
+    <div >
+      <div class="account-summary" *ngFor="let account of accounts">
+        <div class="account-type-title">
+          <div>
+            <h4>
+                <fa class="m-0" name="balance-scale"></fa>
+              {{account.AccountName}} 
+            </h4>
+            <p>
+                #{{account.AccountNumber}}
+            </p>
+          </div>
+          <div>
+              <button class="btn btn-warning btn-sm pull-right m-right-20" (click)="openCreateTrxModal(createTrxModal, account.AccountNumber, account.AccountName)">Create Transaction</button>
+          </div>
+        </div>
+        <div class="no-records-container" *ngIf="!account.AccountRecords || account.AccountRecords.length == 0">
+          <img class="no-records-img" src="https://thumb7.shutterstock.com/display_pic_with_logo/2235128/557208001/stock-vector-to-do-list-with-nothing-written-on-it-line-art-vector-illustration-in-flat-style-design-557208001.jpg" width="60%" height="60%">
+          <h4>No transactions found!</h4>
+          <h5>Create a transaction using the button above.</h5>
+        </div>
+        <table class="account-records" *ngIf="account.AccountRecords && account.AccountRecords.length > 0">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Deposits (Credits)</th>
+              <th>Withdrawals (Debits)</th>              
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="trx-row" *ngFor="let record of account.AccountRecords">
+              <td class="trx-cell trx-date">{{record.TransactionDate | date: "MM/dd/yyyy"}}</td>
+              <td class="trx-cell trx-description">{{record.Description}}</td>
+              <td class="trx-cell trx-amount"><span *ngIf="record.RecordType == '2'">{{record.Amount | currency: "USD"}}</span></td>              
+              <td class="trx-cell trx-amount"><span *ngIf="record.RecordType == '1'">-{{record.Amount | currency: "USD"}}</span></td>
+            </tr>     
+          </tbody>
+          <tfoot>
+            <tr class="footer-row">
+              <td colspan="3"></td>
+              <td>Total:</td>
+            </tr>
+            <tr class="footer-row">
+              <td colspan="3"></td>
+              <td>{{account.CurrentBalance | currency: "USD"}}</td>
+
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div> 
+
+
+<ng-template class="create-trx-modal" #createTrxModal let-modal>
+  <form class="create-trx-form" [formGroup]="createTransactionForm" (ngSubmit)="createTransaction(createTransactionForm.value, modal)" >
+      <h5>{{destinationAccountName}} <small>(#{{destinationAccountNumber}})</small></h5>
+    <label for="trxType">
+      Transaction Type:
+      <select class="form-control" name="trxType" formControlName="transactionType">
+        <option [value]="1">Debit</option>
+        <option [value]="2">Credit</option>
+      </select>
+    </label>
+    <label for="amount">
+      Amount:
+      <input type="text" class="form-control" formControlName="amount" />
+    </label>
+    <label for="description">
+      Description:
+      <textarea class="form-control" formControlName="description"></textarea>
+    </label>
+    <button class="btn btn-warning btn-create-trx" type="submit">Create Transaction</button>
+  </form>
+</ng-template>

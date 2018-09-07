@@ -1,0 +1,65 @@
+<div class="form-container">
+  <div>
+    <img src="../../../assets/imgs/logo_transparent.png" width="150px">
+  </div>
+  <h5>Sign In</h5>
+  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login(loginForm.value.username, loginForm.value.password)">
+    <label for="username">
+      Username
+      <input type="text" name="username" formControlName="username" class="form-control form-control-solid" data-test-id="txtUsername">
+    </label>
+    <label for="password">
+      Password
+      <input type="password" name="password" formControlName="password" class="form-control form-control-solid" data-test-id="txtPassword">
+    </label>
+    <button class="btn btn-warning" type="submit">Sign In</button>
+  </form>
+  <div class="toggle-create-account-container">
+    <h5>Don't have an account?</h5>
+    <button class="btn btn-link btn-create-account" (click)="openRegistrationModal(registrationFormModal)">Create Account</button>
+  </div>  
+
+
+  <p class="login-footer">Created By Cygnus Software</p>
+</div>
+
+<ng-template #registrationFormModal let-modal class="registration-modal">
+  
+  <div *ngIf="displayRegistrationResults" class="registration-response-container" [class.success]="successfullyRegistered">
+    <span *ngIf="successfullyRegistered"><fa name="check-circle" size="3x"></fa></span>
+    <span *ngIf="!successfullyRegistered"><fa name="times-circle" size="3x"></fa></span>
+    <span class="registration-response-message">{{registrationResultMessage}}</span>
+  </div>
+  <button *ngIf="displayRegistrationResults && successfullyRegistered" class="btn btn-success btn-sign-in m-top-30" (click)="modal.close()">Sign In</button>
+
+  <div *ngIf="!successfullyRegistered" class="registration-form-container">
+    <!-- <div class="registration-form-header">
+      New User
+    </div> -->
+    
+    <form class="registration-form" [formGroup]="registrationForm" (ngSubmit)="register(modal, registrationForm.value)">
+      <label for="desiredUsername">
+        Username:
+        <input type="text" name="desiredUsername" formControlName="username" class="form-control form-control-solid" data-test-id="txtDesiredUsername">
+      </label>
+      <label for="desiredPassword">
+        Password:
+          <input type="password" name="desiredPassword" formControlName="password" class="form-control form-control-solid" data-test-id="txtDesiredPassword" required pattern=".{6,100}" title="At least 6 characters are required">
+      </label>
+      <label for="confirmPassword">
+        Confirm Password:
+          <input type="password" name="confirmPassword" formControlName="confirmPassword" class="form-control form-control-solid" data-test-id="txtDesiredPassword">
+      </label>
+      <label for="accountName">
+        Desired Account Name:
+          <input type="text" name="accountName" formControlName="accountName" class="form-control form-control-solid" data-test-id="txtAccountName">
+      </label>
+      <ul *ngIf="!registrationForm.valid && !registrationForm.pristine" class="error-messages">
+        <li *ngIf="registrationForm.value.password.length < 6" >Password must be at least 6-characters long.</li>
+        <li *ngIf="registrationForm.value.password != registrationForm.value.confirmPassword">Passwords do not match.</li>
+      </ul>
+      <button type="submit" class="btn btn-primary btn-register-account">Create Account</button>
+    </form>  
+  </div>
+
+</ng-template>
