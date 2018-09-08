@@ -1,121 +1,140 @@
 $contents-padding: 20px;
 
-fa {
-    color: #FFFFFF;// #6644ee;
-    margin: 0px;
-}
-
-
-thead tr {
-    border-bottom: #333333;
-}
-
-td, th {
-   font-family: verdana,arial,helvetica,sans-serif;
-   font-size: 13px;
-   text-align: left;
-   vertical-align: middle;
-}
-
-.trx-date {
-    width:35px;
-}
-
-.trx-amount {
-    width: 150px;
-}
 
 .panel {
     overflow: auto;
     box-shadow: 2px 2px 1px #BABABA, -2px 2px 1px #BABABA;
-}
 
-
-.no-records-container {
-    padding: 25px;
-    text-align: center;
-
-    & h4 {
-        color: #6644ee;
+    & fa {
+        color: #FFFFFF;// #6644ee;
+        margin: 0px;
     }
-}
 
+    & .no-records-container {
+        padding: 25px;
+        text-align: center;
+    
+        & h4 {
+            color: #6644ee;
+        }
 
-.no-records-img {
-    width: 300px;
-    height: 300px;
-}
-
-.account-type-text {    
-    margin-left: 20px;
-    font-family: verdana,arial,helvetica,sans-serif;
-}
-
-.account-type-title {
-    color: #FFFFFF;// #6644ee;
-    padding-top: 12px;
-    padding-bottom: 5px;
-    padding-right: $contents-padding;
-    padding-left: $contents-padding;
-    background: linear-gradient( rgba(100,100,240, 0.9) 50%, rgba(86,86,234, 1));
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    & p {
-        margin-bottom: 0px;
+        & .no-records-img {
+            width: 300px;
+            height: 300px;
+        }       
     }
- 
-}
 
-.account-records {
-    box-sizing: border-box;
-    border-collapse: collapse;
-    border: 1px solid #ABABAB;
-    width: 100%;
-    & tr {
-        & td, & th {
-            padding:10px;
+    & .account-type-title {
+        color: #FFFFFF;// #6644ee;
+        padding-top: 12px;
+        padding-bottom: 5px;
+        padding-right: $contents-padding;
+        padding-left: $contents-padding;
+        background: linear-gradient( rgba(100,100,240, 0.9) 50%, rgba(86,86,234, 1));
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    
+        & p {
+            margin-bottom: 0px;
+        }
+     
+    }
+
+    & .account-type-text {    
+        margin-left: 20px;
+        font-family: verdana,arial,helvetica,sans-serif;
+    }
+
+
+    & .account-records {
+        box-sizing: border-box;
+        border-collapse: collapse;
+        border: 1px solid #ABABAB;
+        width: 100%;
+
+        & .trx-row {
+            border-bottom: 1px solid #CBCBCB;
+        }
+
+        & .trx-date {
+            width:35px;
+        }
+        
+        & .trx-amount {
+            width: 175px;
+        }
+        
+        & td, th {
+            font-family: verdana,arial,helvetica,sans-serif;
+            font-size: 13px;
+            text-align: left;
+            vertical-align: middle;
+         }
+
+        & tr {
+            & td, & th {
+                padding: 10px;
+            }
+        }
+    
+        & tfoot {
+            & .footer-row {
+                font-weight: bold;
+                & td {
+                    padding: 0px;
+                    padding-left: $contents-padding;
+                }
+            }
         }
     }
-}
 
-.trx-row {
-    border-bottom: 1px solid #CBCBCB;
 }
 
 
-tfoot {
-    & .footer-row {
-        font-weight: bold;
-        & td {
-            padding: 0px;
-            padding-left: $contents-padding;
-        }
-    }
-}
+// h5 {
+//     width: 60%;
+// }
+
+
+
+
+
+
+
 
 .create-trx-modal {    
     padding: 10px;
+
+    
 }
+
 .create-trx-form {
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    & h5 {
-        width: 60%;
-    }
 
-    & label {
+    & label, & input {
         display: block!important;
         width: 60%;
     }
+
+    & .btn-create-trx {
+        width: 50%;
+        margin: 15px auto;
+    }
+    
 }
 
-.btn-create-trx {
-    width: 50%;
-    margin: 15px auto;
-}
+
+
+
+
+
+
+
+
+
 

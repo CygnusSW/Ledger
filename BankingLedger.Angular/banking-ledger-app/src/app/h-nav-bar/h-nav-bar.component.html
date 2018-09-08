@@ -1,4 +1,4 @@
 <nav class="nav-bar-container">
-    <img class="nav-logo" [src]="logoLocation" width="75px" height="75px">
+    <img class="nav-logo pointer" [src]="logoLocation" width="75px" height="75px" (click)="logout()">
     <button class="btn btn-warning pull-right" (click)="logout()">Sign Out</button>
 </nav>

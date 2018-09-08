@@ -77,10 +77,18 @@ export class LoginFormComponent implements OnInit {
     this._authService.Register(registrationForm.username, registrationForm.password, registrationForm.accountName)
     .subscribe(
       (response) => {
-        alertify.success("Created account!");
-        registrationModal.close();
+        if (response != null)
+        {
+          alertify.success("Created account!");
+          registrationModal.close();
+        }
+        else 
+        {
+          this.displayRegistrationMessage("Username not available.", false);
+        }
       },
       (err) => {
+        debugger;
         this.displayRegistrationMessage("Unable to create new account. Please try again later.", false);
       }
     );
