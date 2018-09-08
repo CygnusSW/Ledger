@@ -57,23 +57,35 @@
 
 
 <ng-template class="create-trx-modal" #createTrxModal let-modal>
-  <form class="create-trx-form" [formGroup]="createTransactionForm" (ngSubmit)="createTransaction(createTransactionForm.value, modal)" >
+  <form class="create-trx-form" [formGroup]="createTransactionForm" (ngSubmit)="createTransaction(createTransactionForm.value, modal)" novalidate>
       <h5>{{destinationAccountName}} <small>(#{{destinationAccountNumber}})</small></h5>
-    <label for="trxType">
-      Transaction Type:
-      <select class="form-control" name="trxType" formControlName="transactionType">
+
+    <div class="form-group">
+      <label for="trxType">
+        Transaction Type:
+      </label>
+      <select class="form-control" name="trxType" formControlName="transactionType" required>
         <option [value]="1">Debit</option>
         <option [value]="2">Credit</option>
       </select>
-    </label>
-    <label for="amount">
-      Amount:
-      <input type="text" class="form-control" formControlName="amount" />
-    </label>
-    <label for="description">
-      Description:
-      <textarea class="form-control" formControlName="description"></textarea>
-    </label>
-    <button class="btn btn-warning btn-create-trx" type="submit">Create Transaction</button>
+      <div class="form-control-feedback" *ngIf="transactionType?.errors && (transactionType?.dirty || transactionType?.touched)">
+        <p class="txt-red" *ngIf="createTransactionForm?.controls?.transactionType?.errors?.required">Transaction type is required.</p>
+      </div>
+
+      <label for="amount">
+        Amount:
+      </label>
+      <input type="text" class="form-control" formControlName="amount" required #amountInput/>
+      <label for="description">
+        Description:
+      </label>      
+      <textarea name="description" class="form-control" formControlName="description"></textarea>
+      <div class="form-control-feedback" *ngIf="description?.errors && (description.dirty || description.touched)">
+        <p class="txt-red" *ngIf="createTransactionForm?.controls?.description?.errors?.required">Description is required.</p>
+      </div>
+    </div>
+
+
+    <button class="btn btn-warning btn-create-trx" type="submit" [disabled]="!createTransactionForm.valid">Create Transaction</button>
   </form>
 </ng-template>

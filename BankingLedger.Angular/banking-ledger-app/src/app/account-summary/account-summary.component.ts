@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFontAwesomeComponent } from "angular-font-awesome"
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap"
 import * as alertify from "alertify.js";
 import { BankingService } from "../banking/banking.service";
@@ -29,11 +29,11 @@ export class AccountSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.createTransactionForm = this._fb.group({
-      "transactionType": [""],
-      "amount": [""],
+      "transactionType": ["", Validators.required],
+      "amount": ["", [Validators.required, Validators.min(0.01)]],
       "accountNumber": [""],
-      "description": [""]
-    })
+      "description": ["", [Validators.required, Validators.minLength(1)]]
+    });
 
     this._bankService.getAccounts()
     .subscribe(

@@ -1,5 +1,8 @@
 $contents-padding: 20px;
 
+.txt-red {
+    color: red;
+}
 
 .panel {
     overflow: auto;
@@ -116,7 +119,7 @@ $contents-padding: 20px;
     align-items: center;
 
 
-    & label, & input {
+    & label {
         display: block!important;
         width: 60%;
     }
