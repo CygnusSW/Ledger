@@ -28,12 +28,7 @@ export class AccountSummaryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.createTransactionForm = this._fb.group({
-      "transactionType": ["", Validators.required],
-      "amount": ["", [Validators.required, Validators.min(0.01)]],
-      "accountNumber": [""],
-      "description": ["", [Validators.required, Validators.minLength(1)]]
-    });
+    this.createTransactionForm = this.createTrxForm();
 
     this._bankService.getAccounts()
     .subscribe(
@@ -41,6 +36,16 @@ export class AccountSummaryComponent implements OnInit {
         this.accounts = accounts;
       }
     )
+  }
+
+  createTrxForm()
+  {
+    return this._fb.group({
+      "transactionType": ["", Validators.required],
+      "amount": ["", [Validators.required, Validators.min(0.01)]],
+      "accountNumber": [""],
+      "description": ["", [Validators.required, Validators.minLength(1)]]
+    });
   }
 
   openCreateTrxModal(createTrxModal, accountNumber : number, accountName : string)
@@ -54,12 +59,13 @@ export class AccountSummaryComponent implements OnInit {
       (_) => {
       }
     )
+    this.createTransactionForm = this.createTrxForm();
   }
 
   createTransaction(trxInfo, createTrxModal)
   {
     var destinationAccount = this.accounts.find(acc => acc.AccountNumber == this.destinationAccountNumber);
-    if (destinationAccount)
+    if (destinationAccount && this.createTransactionForm.valid)
     {
       this._bankService
         .createTransaction(
@@ -84,7 +90,6 @@ export class AccountSummaryComponent implements OnInit {
 
   getBalanceAffectingAmount(trx : FinancialTransaction)
   {
-    debugger;
     var factor = trx.RecordType == environment.creditTypeID  ? 1 : -1;
     return trx.Amount * factor;
   }

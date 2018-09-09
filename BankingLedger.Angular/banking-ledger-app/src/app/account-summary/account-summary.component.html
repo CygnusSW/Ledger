@@ -1,23 +1,25 @@
 <div class="panel">
   <div class="account-type-summary">
-    <div >
+    <div>
       <div class="account-summary" *ngFor="let account of accounts">
         <div class="account-type-title">
           <div>
             <h4>
-                <fa class="m-0" name="balance-scale"></fa>
-              {{account.AccountName}} 
+              <fa class="m-0" name="balance-scale"></fa>
+              {{account.AccountName}}
             </h4>
             <p>
-                #{{account.AccountNumber}}
+              #{{account.AccountNumber}}
             </p>
           </div>
           <div>
-              <button class="btn btn-warning btn-sm pull-right m-right-20" (click)="openCreateTrxModal(createTrxModal, account.AccountNumber, account.AccountName)">Create Transaction</button>
+            <button class="btn btn-warning btn-sm pull-right m-right-20" (click)="openCreateTrxModal(createTrxModal, account.AccountNumber, account.AccountName)">Create
+              Transaction</button>
           </div>
         </div>
         <div class="no-records-container" *ngIf="!account.AccountRecords || account.AccountRecords.length == 0">
-          <img class="no-records-img" src="https://thumb7.shutterstock.com/display_pic_with_logo/2235128/557208001/stock-vector-to-do-list-with-nothing-written-on-it-line-art-vector-illustration-in-flat-style-design-557208001.jpg" width="60%" height="60%">
+          <img class="no-records-img" src="https://thumb7.shutterstock.com/display_pic_with_logo/2235128/557208001/stock-vector-to-do-list-with-nothing-written-on-it-line-art-vector-illustration-in-flat-style-design-557208001.jpg"
+            width="60%" height="60%">
           <h4>No transactions found!</h4>
           <h5>Create a transaction using the button above.</h5>
         </div>
@@ -27,16 +29,16 @@
               <th>Date</th>
               <th>Description</th>
               <th>Deposits</th>
-              <th>Withdrawals</th>              
+              <th>Withdrawals</th>
             </tr>
           </thead>
           <tbody>
             <tr class="trx-row" *ngFor="let record of account.AccountRecords">
               <td class="trx-cell trx-date">{{record.TransactionDate | date: "MM/dd/yyyy"}}</td>
               <td class="trx-cell trx-description">{{record.Description}}</td>
-              <td class="trx-cell trx-amount"><span *ngIf="record.RecordType == '2'">{{record.Amount | currency: "USD"}}</span></td>              
+              <td class="trx-cell trx-amount"><span *ngIf="record.RecordType == '2'">{{record.Amount | currency: "USD"}}</span></td>
               <td class="trx-cell trx-amount"><span *ngIf="record.RecordType == '1'">-{{record.Amount | currency: "USD"}}</span></td>
-            </tr>     
+            </tr>
           </tbody>
           <tfoot>
             <tr class="footer-row">
@@ -53,39 +55,40 @@
       </div>
     </div>
   </div>
-</div> 
+</div>
 
 
 <ng-template class="create-trx-modal" #createTrxModal let-modal>
-  <form class="create-trx-form" [formGroup]="createTransactionForm" (ngSubmit)="createTransaction(createTransactionForm.value, modal)" novalidate>
-      <h5>{{destinationAccountName}} <small>(#{{destinationAccountNumber}})</small></h5>
+  <h5>{{destinationAccountName}} <small>(#{{destinationAccountNumber}})</small></h5>
+  <form class="create-trx-form" [formGroup]="createTransactionForm" (ngSubmit)="createTransaction(createTransactionForm.value, modal)">
 
     <div class="form-group">
-      <label for="trxType">
+      <label>
         Transaction Type:
       </label>
       <select class="form-control" name="trxType" formControlName="transactionType" required>
-        <option [value]="1">Debit</option>
-        <option [value]="2">Credit</option>
+        <option value="1">Debit</option>
+        <option value="2">Credit</option>
       </select>
-      <div class="form-control-feedback" *ngIf="transactionType?.errors && (transactionType?.dirty || transactionType?.touched)">
-        <p class="txt-red" *ngIf="createTransactionForm?.controls?.transactionType?.errors?.required">Transaction type is required.</p>
+      <div class="form-control-feedback" *ngIf="createTransactionForm?.controls?.transactionType.errors && !createTransactionForm?.controls?.transactionType.pristine">
+        <p class="txt-red" *ngIf="createTransactionForm.controls.transactionType.errors.required">Transaction type is required.</p>
       </div>
 
       <label for="amount">
         Amount:
       </label>
-      <input type="text" class="form-control" formControlName="amount" required #amountInput/>
+      <input type="text" class="form-control" formControlName="amount" required/>
+      <div class="form-control-feedback" *ngIf="createTransactionForm?.controls?.amount.errors && !createTransactionForm?.controls?.amount.pristine">
+        <p *ngIf="createTransactionForm.controls.amount.errors.min">Minimum amount is $0.01.</p>
+      </div>
       <label for="description">
         Description:
-      </label>      
-      <textarea name="description" class="form-control" formControlName="description"></textarea>
-      <div class="form-control-feedback" *ngIf="description?.errors && (description.dirty || description.touched)">
-        <p class="txt-red" *ngIf="createTransactionForm?.controls?.description?.errors?.required">Description is required.</p>
+      </label>
+      <textarea name="description" class="form-control" formControlName="description"> </textarea>
+      <div class="form-control-feedback" *ngIf="createTransactionForm.controls.description.errors && !createTransactionForm?.controls?.description.pristine">
+        <p *ngIf="createTransactionForm.controls.description.errors.required">Descripton is required.</p>
       </div>
     </div>
-
-
     <button class="btn btn-warning btn-create-trx" type="submit" [disabled]="!createTransactionForm.valid">Create Transaction</button>
   </form>
 </ng-template>

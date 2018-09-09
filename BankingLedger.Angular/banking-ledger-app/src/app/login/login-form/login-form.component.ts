@@ -49,9 +49,11 @@ export class LoginFormComponent implements OnInit {
     this._authService.Login(username, password)
     .subscribe(
       (authResult) => {
+        debugger;
         this.navigateToSummaryPage();
       },
       (err : HttpErrorResponse) => {
+        debugger;
         if (err.status == 400)
           alertify.alert("Invalid username or password.");
         else 
@@ -88,7 +90,6 @@ export class LoginFormComponent implements OnInit {
         }
       },
       (err) => {
-        debugger;
         this.displayRegistrationMessage("Unable to create new account. Please try again later.", false);
       }
     );
