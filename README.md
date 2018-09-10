@@ -23,7 +23,9 @@ The solution is comprised of four projects:
 To run this project, pull this repository with:
 `git clone https://github.com/Rom2711/Ledger.git `
 
-Once you have the project locally. Open the solution with Visual Studio and run the solution through debugger or deploy to IIS server. There are pre-build scripts on the API project to automatically build the angular project and serve it through Web Api Endpoints.
+Once you have the project locally. Open the solution with Visual Studio and run the solution through debugger or deploy to IIS server. There are pre-build scripts on the API project to automatically build the angular project and serve it through Web Api Endpoints. **This may take several minutes**; All of the npm packages must be installed, as part of the build process.
+
+
 
 ### Testing ###
 To run unit tests, run all of the tests in the VS test explorer or other test-runner. 

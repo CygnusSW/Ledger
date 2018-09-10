@@ -397,6 +397,10 @@
   <PropertyGroup>
     <PreBuildEvent>echo "cd $(SolutionDir)BankingLedger.Angular/banking-ledger-app" &amp;&amp;^
 cd "$(SolutionDir)BankingLedger.Angular/banking-ledger-app" &amp;&amp;^
+echo "NPM Installing"
+npm install &amp;&amp;^
+echo "cd $(SolutionDir)BankingLedger.Angular/banking-ledger-app" &amp;&amp;^
+cd "$(SolutionDir)BankingLedger.Angular/banking-ledger-app" &amp;&amp;^
 echo "building banking-ledger-app" &amp;&amp;^
 ng build --prod --base-href / &amp;&amp;^
 echo 'copy files' &amp;&amp;^
