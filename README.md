@@ -33,3 +33,4 @@ To run unit tests, run all of the tests in the VS test explorer or other test-ru
 ### Credits ###
 * Loading Video: "https://www.shutterstock.com/video/clip-2540876?irgwc=1&utm_medium=Affiliate&utm_campaign=Oxford%20Media%20Solutions&utm_source=51471&utm_term="
 * No-Record Placeholder: "https://www.shutterstock.com/image-vector/do-list-nothing-written-on-line-557208001?src=ICq6mKhMtFivS8mDHD7snA-1-83"
+* Logo: "https://hatchful.shopify.com/"
