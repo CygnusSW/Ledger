@@ -24,10 +24,17 @@ namespace BankingLedger.API.CustomIdentity.Stores
 
         public Task CreateAsync(CustomUser user)
         {
+            Task task;
             if (!_users.ContainsKey(user.UserName))
+            {
                 _users.Add(user.UserName, user);
-
-            return Task.FromResult(user);
+                task = Task.FromResult(user);
+            }
+            else
+            {
+                task = Task.FromResult<object>(null);
+            }
+            return task;
         }
 
         public Task DeleteAsync(CustomUser user)

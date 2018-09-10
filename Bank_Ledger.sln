@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingLedger.Core.Test", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingLedger.API", "BankingLedger.API\BankingLedger.API.csproj", "{6413BDBE-40A8-465D-8D82-7040777AF2EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingLedger.Angular", "BankingLedger.Angular\BankingLedger.Angular.csproj", "{C00564F5-B96E-4885-B879-36A5EDE0868E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6413BDBE-40A8-465D-8D82-7040777AF2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6413BDBE-40A8-465D-8D82-7040777AF2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6413BDBE-40A8-465D-8D82-7040777AF2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C00564F5-B96E-4885-B879-36A5EDE0868E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C00564F5-B96E-4885-B879-36A5EDE0868E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C00564F5-B96E-4885-B879-36A5EDE0868E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C00564F5-B96E-4885-B879-36A5EDE0868E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

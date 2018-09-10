@@ -16,10 +16,16 @@ using BankingLedger.API.Models;
 using BankingLedger.API.Providers;
 using BankingLedger.API.Results;
 using BankingLedger.API.CustomIdentity.Models;
+using System.Web.Http.Cors;
+using BankingLedger.Core;
+using System.Configuration;
+using BankingLedger.Core.Enums;
+using System.Linq;
+using BankingLedger.Core.DataModels;
 
 namespace BankingLedger.API.Controllers
 {
-    [RoutePrefix("api/Account")]
+    //[EnableCors(origins: "http://localhost:4200", headers: "*", methods: "*")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
@@ -51,25 +57,32 @@ namespace BankingLedger.API.Controllers
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
 
-        // POST api/Account/Logout
-        [Route("Logout")]
+        [HttpPost]
+        [Route("api/v1/logout")]
         public IHttpActionResult Logout()
         {
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
+
         
         // POST api/Account/Register
         [AllowAnonymous]
-        [Route("Register")]
-        public async Task<IHttpActionResult> Register(UserModel model)
+        [HttpPost]
+        [Route("api/v1/register")]
+        public async Task<IHttpActionResult> Register(AuthRequestModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            var user = new CustomUser() { UserName = model.Username };
+            var initialBankAccount = new BankingAccount(model.AccountName, int.Parse(ConfigurationManager.AppSettings["snapshotFrequency"]));
+            var user = new CustomUser() {
+                UserName = model.Username,
+                BankAccounts = new List<BankingAccount>() {
+                    initialBankAccount
+                }
+            };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -78,23 +91,42 @@ namespace BankingLedger.API.Controllers
                 return GetErrorResult(result);
             }
 
-            return Ok();
+            return Ok(result.Succeeded);
         }
 
-        public async Task Login(string username, string password)
+
+        [HttpGet]
+        [Authorize]
+        [Route("api/v1/accounts")]
+        public IHttpActionResult GetAccounts()
         {
-            var user = UserManager.FindByName(username);
-            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            Authentication.SignIn(
-                new AuthenticationProperties()
-                {
-                    IsPersistent = true,
-                    ExpiresUtc = DateTime.Now.AddMinutes(15),
-                    IssuedUtc = DateTime.Now
-                },
-                identity);
+            var userName = User.Identity.GetUserName();            
+            CustomUser us = UserManager.FindByName(userName);
+
+            return Ok(us.BankAccounts);
         }
 
+
+
+        [HttpPost]
+        [Authorize]
+        [Route("api/v1/transaction")]
+        public IHttpActionResult CreateTransaction(CreateTransactionRequest trxInfo)
+        {
+            var transactionType = (FinancialTransactionType)trxInfo.TransactionType;
+            var userName = User.Identity.GetUserName();
+            CustomUser us = UserManager.FindByName(userName);
+            var accountReceivingTrx = us.BankAccounts.FirstOrDefault(acc => acc.AccountNumber == trxInfo.AccountNumber);
+            if (accountReceivingTrx == null)
+                return BadRequest("Invalid Account Number");
+            var transactionBeingAdded = new FinancialTransaction(trxInfo.Amount, trxInfo.Description, DateTime.UtcNow, transactionType);
+            
+            accountReceivingTrx.AccountRecords.Add(transactionBeingAdded);
+            UserManager.Update(us);
+            return Ok(transactionBeingAdded);
+        }
+
+        
 
         //protected override void Dispose(bool disposing)
         //{

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -18,6 +19,22 @@ namespace BankingLedger.API
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        /// <summary>
+        /// In production ccode, we'd want to white-list IP Addresses, instead of global-allow.
+        /// </summary>
+        protected void Application_BeginRequest()
+        {
+            if (Request.HttpMethod == "OPTIONS")
+            {
+                Response.StatusCode = (int)HttpStatusCode.OK;
+                Response.AppendHeader("Access-Control-Allow-Origin", "*");
+                Response.AddHeader("Access-Control-Allow-Headers", "*");
+                Response.AddHeader("Access-Control-Allow-Methods", "*");
+                Response.AppendHeader("Access-Control-Allow-Credentials", "true");
+                Response.End();
+            }
         }
     }
 }

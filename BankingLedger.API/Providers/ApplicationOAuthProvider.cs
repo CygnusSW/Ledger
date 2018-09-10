@@ -18,7 +18,7 @@ namespace BankingLedger.API.Providers
 
         public ApplicationOAuthProvider(string publicClientId)
         {
-
+            _publicClientId = publicClientId;
         }
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)

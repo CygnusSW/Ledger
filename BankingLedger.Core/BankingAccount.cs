@@ -14,12 +14,12 @@ namespace BankingLedger.Core
     /// </summary>
     public class BankingAccount
     {
-        private List<FinancialTransaction> _accountRecords;
+        public List<FinancialTransaction> AccountRecords;
         private List<BalanceSnapshot> _snapshots;
         private string _accountName;
         private int _snapshotFrequency;
 
-        private long AccountNumber { get; }
+        public long AccountNumber { get; }
 
         public string AccountName
         {
@@ -29,13 +29,22 @@ namespace BankingLedger.Core
             }
         }
 
+        public decimal CurrentBalance
+        {
+            get
+            {
+                return GetBalance();
+            }
+        }
+
+
         public BankingAccount(string accountName, int snapshotFrequency)
         {
             AccountNumber = MockIDGenerator.Generate();
             _accountName= accountName;
-            _accountRecords = new List<FinancialTransaction>();
             _snapshots = new List<BalanceSnapshot>();
             _snapshotFrequency = snapshotFrequency;
+            AccountRecords = new List<FinancialTransaction>();
         }
 
         public decimal GetBalance()
@@ -44,15 +53,16 @@ namespace BankingLedger.Core
 
             //This is a 'hacky' implementation. 
             //In a production system, this would be based on date, not ID
+            //There would also be cleaner separation between read and write models (think cqrs)
             BalanceSnapshot lastSnapshot = GetMostRecentSnapshot();
             if (lastSnapshot != null)
             {
-                var trxsSinceSnapshot = _accountRecords.Where(t => t.TransactionID > lastSnapshot.TransactionID);
+                var trxsSinceSnapshot = AccountRecords.Where(t => t.TransactionID > lastSnapshot.TransactionID);
                 currentBalance = SumTransactions(trxsSinceSnapshot) + lastSnapshot.Balance;
             }
             else
             {
-                currentBalance = SumTransactions(_accountRecords);
+                currentBalance = SumTransactions(AccountRecords);
             }
             
             return currentBalance;
@@ -65,12 +75,12 @@ namespace BankingLedger.Core
         /// <returns>The account balance after the transaction has been posted.</returns>
         public decimal PostTransaction(FinancialTransaction trx)
         {
-            _accountRecords.Add(trx);
+            AccountRecords.Add(trx);
             var currentBalance = GetBalance();
 
             //In a production system, we would run a separate process that would snapshot
             //the previous days event, and we would make the snapshot time-based instead of ID-based.
-            var shouldSnapshot = _accountRecords.Count % _snapshotFrequency == 0;
+            var shouldSnapshot = AccountRecords.Count % _snapshotFrequency == 0;
             if (shouldSnapshot)
             {                
                 _snapshots.Add(new BalanceSnapshot(currentBalance, DateTime.UtcNow, trx.TransactionID));
